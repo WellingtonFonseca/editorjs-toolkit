@@ -1,0 +1,3 @@
+**/*.code-workspace
+**/tailwind.config.js
+**/.DS_Store
