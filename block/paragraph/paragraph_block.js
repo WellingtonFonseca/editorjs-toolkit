@@ -56,6 +56,10 @@ export class ParagraphBlock {
       this._config.placeholder = 'Paragraph';
     }
 
+    if (this._config.placeholderOnActive === undefined || this._config.placeholderOnActive === null) {
+      this._config.placeholderOnActive = 'Typing...';
+    }
+
     // aligment
     this._alignmentConfigure({ prefixIndentify: 'paragraph' });
   }
@@ -114,6 +118,8 @@ export class ParagraphBlock {
     if (this._data.text === '') {
       tag.setAttribute('data-placeholder', this._config.placeholder);
     }
+
+    tag.setAttribute('data-placeholder-active', this._config.placeholderOnActive);
 
     Object.assign(tag.style, {
       textAlign: this._data.align,
