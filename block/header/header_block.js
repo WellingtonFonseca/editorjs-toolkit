@@ -1,5 +1,5 @@
-import { alignmentBlockTuneFunctions } from './_alignment_block_tune.js';
-import { blockUtilsFunctions } from './_block_utils.js';
+import { alignmentBlockTuneFunctions } from '../_alignment_block_tune.js';
+import { blockUtilsFunctions } from '../_block_utils.js';
 
 export class HeaderBlock {
   static get isTune() {
