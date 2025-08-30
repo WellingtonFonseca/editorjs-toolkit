@@ -181,6 +181,10 @@ export class AlertBlock {
     this._config.readOnly = readOnly;
     this._config.replaceAlertDefaultTypes = this._config.replaceAlertDefaultTypes ?? false;
 
+    if (this._config.placeholderOnActive === undefined || this._config.placeholderOnActive === null) {
+      this._config.placeholderOnActive = 'Typing...';
+    }
+
     // alert
     const customAlertTypesProvided = Array.isArray(this._config.alertTypes) && this._config.alertTypes.length > 0;
 
@@ -398,11 +402,12 @@ export class AlertBlock {
 
     textElement.innerHTML = this._data.text;
     textElement.contentEditable = this._config.readOnly === false ? true : false;
+
     if (this._data.text === '') {
       textElement.setAttribute('data-placeholder', this._elementData.label);
     }
 
-    textElement.setAttribute('data-placeholder-active', 'Digite...');
+    textElement.setAttribute('data-placeholder-active', this._config.placeholderOnActive);
 
     Object.assign(textElement.style, {
       width: this._data.use_icon === true ? '90%' : '100%',
