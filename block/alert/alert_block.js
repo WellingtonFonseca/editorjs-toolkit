@@ -1,4 +1,4 @@
-import { blockUtilsFunctions } from './_block_utils.js';
+import { blockUtilsFunctions } from '../_block_utils.js';
 
 export class AlertBlock {
   static get isTune() {
@@ -182,8 +182,6 @@ export class AlertBlock {
     this._config.replaceAlertDefaultTypes = this._config.replaceAlertDefaultTypes ?? false;
 
     // alert
-    this._config.alertOptionIdentify = 'alert-option';
-
     const customAlertTypesProvided = Array.isArray(this._config.alertTypes) && this._config.alertTypes.length > 0;
 
     if (this._config.replaceAlertDefaultTypes === true) {
@@ -210,8 +208,6 @@ export class AlertBlock {
     }
 
     // style
-    this._config.alertStyleOptionIdentify = 'alert-style-option';
-
     const customAlertStyleTypesProvided = Array.isArray(this._config.alertStyleTypes) && this._config.alertStyleTypes.length > 0;
 
     if (this._config.alertStyleTypes !== undefined && !customAlertStyleTypesProvided) {
@@ -229,8 +225,6 @@ export class AlertBlock {
     }
 
     // icon
-    this._config.alertUseIconOptionIdentify = 'alert-use-icon-option';
-
     const customAlertUseIconTypesProvided = Array.isArray(this._config.alertUseIconTypes) && this._config.alertUseIconTypes.length > 0;
 
     if (this._config.alertUseIconTypes !== undefined && !customAlertUseIconTypesProvided) {
@@ -264,48 +258,61 @@ export class AlertBlock {
     }
 
     const alertTypeOptions = this._config.alertTypes.map((properties) => ({
-      icon: `<span class="${this._config.alertOptionIdentify}">${properties.iconMenu}</span>`,
+      type: 'default',
+      icon: properties.iconMenu,
       label: properties.label,
-      onActivate: (event) => {
-        this._blockUtilsChangeOptionMenu({
-          event: event,
-          menuOptions: document.querySelectorAll(`.${this._config.alertOptionIdentify}`),
-        });
-        this._changeType({ newType: properties.tag });
-      },
-      isActive: this._data.alert.toUpperCase() === properties.tag.toUpperCase(),
       closeOnActivate: false,
+      toggle: 'alert_types',
+      isActive: this._data.alert.toUpperCase() === properties.tag.toUpperCase(),
+      isDisabled: false,
+      onActivate: (event) => {
+        this._changeType({
+          newType: properties.tag,
+        });
+      },
+      hint: {
+        title: properties.label,
+        description: 'change alert type',
+        alignment: 'start',
+      },
     }));
 
     const styleOptions = this._config.alertStyleTypes.map((properties) => ({
-      icon: `<span class="${this._config.alertStyleOptionIdentify}">${properties.icon}</span>`,
+      type: 'default',
+      icon: properties.icon,
       label: properties.label,
-      onActivate: (event) => {
-        this._blockUtilsChangeOptionMenu({
-          event: event,
-          menuOptions: document.querySelectorAll(`.${this._config.alertStyleOptionIdentify}`),
-        });
-        this._changeStyle({ newStyle: properties.tag });
-      },
-      isActive: this._data.style.toUpperCase() === properties.tag.toUpperCase(),
       closeOnActivate: false,
+      toggle: 'alert_styles',
+      isActive: this._data.style.toUpperCase() === properties.tag.toUpperCase(),
+      isDisabled: false,
+      onActivate: (event) => {
+        this._changeStyle({
+          newStyle: properties.tag,
+        });
+      },
+      hint: {
+        title: properties.label,
+        description: 'change alert style',
+        alignment: 'start',
+      },
     }));
 
     const useIconOptions = this._config.alertUseIconTypes.map((properties) => ({
-      icon: `<span class="${this._config.alertUseIconOptionIdentify}">${properties.icon}</span>`,
+      type: 'default',
+      icon: properties.icon,
       label: properties.label,
-      onActivate: (event) => {
-        this._blockUtilsChangeOptionMenu({
-          event: event,
-          menuOptions: document.querySelectorAll(`.${this._config.alertUseIconOptionIdentify}`),
-        });
-        this._changeUseIcon({ newState: properties.use });
-      },
-      isActive: this._data.use_icon === properties.use,
       closeOnActivate: false,
+      toggle: 'alert_use_icon',
+      isActive: this._data.use_icon === properties.use,
+      isDisabled: false,
+      onActivate: (event) => {
+        this._changeUseIcon({
+          newState: properties.use,
+        });
+      },
     }));
 
-    return [...alertTypeOptions, ...styleOptions, ...useIconOptions];
+    return [...alertTypeOptions, ...this._blockUtilsSeparator, ...styleOptions, ...this._blockUtilsSeparator, ...useIconOptions];
   }
 
   save(blockContent) {
@@ -394,6 +401,9 @@ export class AlertBlock {
     if (this._data.text === '') {
       textElement.setAttribute('data-placeholder', this._elementData.label);
     }
+
+    textElement.setAttribute('data-placeholder-active', 'Digite...');
+
     Object.assign(textElement.style, {
       width: this._data.use_icon === true ? '90%' : '100%',
       // paddingLeft: '10px',

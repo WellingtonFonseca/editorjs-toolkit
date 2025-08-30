@@ -1,4 +1,9 @@
 export const blockUtilsFunctions = {
+  _blockUtilsSeparator : [
+      {
+        type: 'separator',
+      },
+    ],
   _blockUtilsChangeOptionMenu({event, menuOptions} = {}) {
     menuOptions.forEach((element) => {
       const menuOptionClosest = element.closest('.ce-popover-item');
