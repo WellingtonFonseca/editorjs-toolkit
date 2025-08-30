@@ -116,7 +116,7 @@ export class HeaderBlock {
     }
 
     // aligment
-    this._alignmentConfigure({ prefixIndentify: 'header' });
+    this._alignmentConfigure({});
   }
 
   destroy() {}

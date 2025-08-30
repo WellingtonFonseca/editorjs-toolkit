@@ -61,7 +61,7 @@ export class ParagraphBlock {
     }
 
     // aligment
-    this._alignmentConfigure({ prefixIndentify: 'paragraph' });
+    this._alignmentConfigure({});
   }
 
   destroy() {}

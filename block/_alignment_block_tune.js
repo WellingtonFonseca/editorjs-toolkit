@@ -17,9 +17,7 @@ export const DEFAULT_ALIGNMENT_CONFIG = [
 ];
 
 export const alignmentBlockTuneFunctions = {
-  _alignmentConfigure({ prefixIndentify } = {}) {
-    this._config.aligmentOptionIdentify = `${prefixIndentify}-aligment-option`;
-
+  _alignmentConfigure({} = {}) {
     const customAlignmentTypesProvided = Array.isArray(this._config.alignmentTypes) && this._config.alignmentTypes.length > 0;
 
     if (this._config.alignmentTypes !== undefined && !customAlignmentTypesProvided) {
@@ -39,8 +37,13 @@ export const alignmentBlockTuneFunctions = {
 
   _alignmentGetOptions({} = {}) {
     return this._config.alignmentTypes.map((properties) => ({
-      icon: `<span class="${this._config.aligmentOptionIdentify}">${properties.icon}</span>`,
+      type: 'default',
+      icon: properties.icon,
       label: properties.label,
+      closeOnActivate: false,
+      toggle: 'alingnments_block',
+      isActive: this._data.align.toUpperCase() === properties.tag.toUpperCase(),
+      isDisabled: false,
       onActivate: (event) => {
         this._blockUtilsChangeOptionMenu({
           event: event,
@@ -50,8 +53,11 @@ export const alignmentBlockTuneFunctions = {
           newAlign: properties.tag,
         });
       },
-      isActive: this._data.align.toUpperCase() === properties.tag.toUpperCase(),
-      closeOnActivate: false,
+      hint: {
+        title: properties.label,
+        description: 'change alingnment',
+        alignment: 'start',
+      },
     }));
   },
 
