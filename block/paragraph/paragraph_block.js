@@ -32,6 +32,7 @@ export class ParagraphBlock {
     this._data = {
       text: data.text || '',
       align: data.align || (config && config.defaultAlign) || 'left',
+      bold: data.bold !== undefined ? data.bold : true,
     };
 
     this._element = null;
@@ -87,6 +88,7 @@ export class ParagraphBlock {
     return {
       text: blockContent.innerHTML,
       align: this._data.align,
+      bold: this._data.bold,
     };
   }
 
@@ -125,6 +127,7 @@ export class ParagraphBlock {
       textAlign: this._data.align,
       fontSize: '14px',
       fontFamily: 'Arial, sans-serif',
+      fontWeight: this._data.bold ? 'bold' : 'normal',
     });
 
     return tag;

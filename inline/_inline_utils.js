@@ -1,3 +1,30 @@
+export const INLINE_TOOL_CONFIG = {
+  B: {
+    tag: 'b',
+    styleProperty: 'fontWeight',
+    styleValue: 'bold',
+    blockProperty: 'bold',
+  },
+  I: {
+    tag: 'i',
+    styleProperty: 'fontStyle',
+    styleValue: 'italic',
+    blockProperty: 'italic',
+  },
+  U: {
+    tag: 'u',
+    styleProperty: 'textDecoration',
+    styleValue: 'underline',
+    blockProperty: 'underline',
+  },
+  S: {
+    tag: 's',
+    styleProperty: 'textDecoration',
+    styleValue: 'line-through',
+    blockProperty: 'strikethrough',
+  },
+};
+
 export const inlineUtilsFunctions = {
   _inlineUtilsHandleButtonClick({ event, tag, style }) {
     event.preventDefault();
@@ -13,20 +40,37 @@ export const inlineUtilsFunctions = {
     }
     const range = selection.getRangeAt(0);
 
+    const blockElement = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
+    const blockHolder = blockElement.closest('.ce-block');
+    const blockId = blockHolder ? blockHolder.dataset.id : null;
+
     const mark = this._api.selection.findParentTag(tag);
 
     if (mark) {
-      this._inlineUtilsUnwrap({
-        range: range,
-        tag: tag,
-      });
+      this._inlineUtilsUnwrap({ range: range, tag: tag });
       this.state = false;
     } else {
-      this._inlineUtilsWrap({
-        range: range,
-        tag: tag,
-        style: style,
-      });
+      if (blockId && INLINE_TOOL_CONFIG[tag]) {
+        const config = INLINE_TOOL_CONFIG[tag];
+        const editableElement = blockHolder.querySelector('[contentEditable="true"]');
+        if (editableElement) {
+          const blockData = this._api.blocks.getById(blockId);
+          if (blockData && (editableElement.style[config.styleProperty] === config.styleValue || editableElement.querySelector(config.tag))) {
+            this._api.blocks.update(blockId, {
+              ...blockData.data,
+              [config.blockProperty]: false,
+            });
+            const existingTag = editableElement.querySelector(config.tag);
+            if (existingTag) {
+              while (existingTag.firstChild) {
+                editableElement.insertBefore(existingTag.firstChild, existingTag);
+              }
+              existingTag.remove();
+            }
+          }
+        }
+      }
+      this._inlineUtilsWrap({ range: range, tag: tag, style: style });
       this.state = true;
     }
   },
