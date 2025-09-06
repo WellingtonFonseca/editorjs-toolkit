@@ -1,4 +1,5 @@
 import { alignmentBlockTuneFunctions } from '../_alignment_block_tune.js';
+import { boldBlockTuneFunctions } from '../_bold_block_tune.js';
 import { blockUtilsFunctions } from '../_block_utils.js';
 
 export class ParagraphBlock {
@@ -32,7 +33,7 @@ export class ParagraphBlock {
     this._data = {
       text: data.text || '',
       align: data.align || (config && config.defaultAlign) || 'left',
-      bold: data.bold !== undefined ? data.bold : true,
+      bold: data.bold !== undefined ? data.bold : false,
     };
 
     this._element = null;
@@ -40,6 +41,7 @@ export class ParagraphBlock {
     this._blockId = block.id;
 
     Object.assign(this, alignmentBlockTuneFunctions);
+    Object.assign(this, boldBlockTuneFunctions);
     Object.assign(this, blockUtilsFunctions);
 
     this._setConfig({
@@ -63,6 +65,9 @@ export class ParagraphBlock {
 
     // aligment
     this._alignmentConfigure({});
+
+    // bold
+    this._boldConfigure({});
   }
 
   destroy() {}
@@ -78,8 +83,9 @@ export class ParagraphBlock {
     }
 
     const alignmentOptions = this._alignmentGetOptions({});
+    const boldOptions = this._boldGetOptions({});
 
-    return [...alignmentOptions];
+    return [...alignmentOptions, ...this._blockUtilsSeparator, ...boldOptions];
   }
 
   save(blockContent) {
