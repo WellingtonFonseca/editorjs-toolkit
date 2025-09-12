@@ -1,5 +1,6 @@
 import { alignmentBlockTuneFunctions } from '../_alignment_block_tune.js';
 import { underlineBlockTuneFunctions } from '../_underline_block_tune.js';
+import { strikethroughBlockTuneFunctions } from '../_strikethrough_block.js';
 import { boldBlockTuneFunctions } from '../_bold_block_tune.js';
 import { blockUtilsFunctions } from '../_block_utils.js';
 
@@ -36,6 +37,7 @@ export class ParagraphBlock {
       align: data.align || (config && config.defaultAlign) || 'left',
       bold: data.bold !== undefined ? data.bold : false,
       underline: data.underline !== undefined ? data.underline : false,
+      strikethrough: data.strikethrough !== undefined ? data.strikethrough : false,
     };
 
     this._element = null;
@@ -45,6 +47,8 @@ export class ParagraphBlock {
     Object.assign(this, alignmentBlockTuneFunctions);
     Object.assign(this, boldBlockTuneFunctions);
     Object.assign(this, underlineBlockTuneFunctions);
+    Object.assign(this, strikethroughBlockTuneFunctions);
+
     Object.assign(this, blockUtilsFunctions);
 
     this._setConfig({
@@ -74,6 +78,9 @@ export class ParagraphBlock {
 
     // underline
     this._underlineConfigure({});
+
+    // strikethrough
+    this._strikethroughConfigure({});
   }
 
   destroy() {}
@@ -92,8 +99,9 @@ export class ParagraphBlock {
 
     const boldOptions = this._boldGetOptions({});
     const underlineOptions = this._underlineGetOptions({});
+    const strikethroughOptions = this._strikethroughGetOptions({});
 
-    return [...alignmentOptions, ...this._blockUtilsSeparator, ...boldOptions, ...underlineOptions];
+    return [...alignmentOptions, ...this._blockUtilsSeparator, ...boldOptions, ...underlineOptions, ...strikethroughOptions];
   }
 
   save(blockContent) {
@@ -104,6 +112,7 @@ export class ParagraphBlock {
       align: this._data.align,
       bold: this._data.bold,
       underline: this._data.underline,
+      strikethrough: this._data.strikethrough,
     };
   }
 
