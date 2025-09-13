@@ -57,27 +57,7 @@ export class BoldInline {
 
   checkState() {
     const mark = this._api.selection.findParentTag(BoldInline.TAG);
-    if (mark) {
-      this.state = true;
-      return;
-    }
-
-    const selection = window.getSelection();
-    if (selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      const blockElement = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
-      const blockHolder = blockElement.closest('.ce-block');
-      if (blockHolder) {
-        // Encontrar o elemento editável (com contentEditable=true ou texto principal)
-        const editableElement = blockHolder.querySelector('[contentEditable="true"]');
-        if (editableElement && (editableElement.style.fontWeight === 'bold' || editableElement.querySelector('b'))) {
-          this.state = true;
-          return;
-        }
-      }
-    }
-
-    this.state = false;
+    this.state = !!mark;
   }
 
   static get sanitize() {
