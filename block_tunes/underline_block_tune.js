@@ -14,24 +14,24 @@ export const underlineBlockTuneFunctions = {
 
   _underlineConfigure({} = {}) {
     this._config.underlineEnabled = this._config.underlineEnabled !== undefined ? this._config.underlineEnabled : true;
-    const customUnderlineTypesProvided = Array.isArray(this._config.underlineTypes) && this._config.underlineTypes.length > 0;
-    if (this._config.underlineTypes !== undefined && !customUnderlineTypesProvided) {
+    const customUnderlineTypesProvided = Array.isArray(this._config.underlineTunesTypes) && this._config.underlineTunesTypes.length > 0;
+    if (this._config.underlineTunesTypes !== undefined && !customUnderlineTypesProvided) {
       console.warn("(ง'̀-'́)ง Underline Option: no valid types were provided.");
     }
     if (customUnderlineTypesProvided) {
-      this._config.underlineTypes = this._blockTunesUtilsGetMergedConfig({
+      this._config.underlineTunesTypes = this._blockTunesUtilsGetMergedConfig({
         defaultConfig: DEFAULT_UNDERLINE_CONFIG,
-        customConfig: this._config.underlineTypes,
+        customConfig: this._config.underlineTunesTypes,
         override: true,
       });
     } else {
-      this._config.underlineTypes = DEFAULT_UNDERLINE_CONFIG;
+      this._config.underlineTunesTypes = DEFAULT_UNDERLINE_CONFIG;
     }
   },
 
   _underlineGetOptions({} = {}) {
     const element = this._element;
-    return this._config.underlineTypes.map((properties) => ({
+    return this._config.underlineTunesTypes.map((properties) => ({
       type: 'default',
       icon: properties.icon,
       label: properties.label,

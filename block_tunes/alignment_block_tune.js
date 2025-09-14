@@ -23,25 +23,25 @@ export const alignmentBlockTuneFunctions = {
   _alignmentConfigure({} = {}) {
     this._config.alingnmentEnabled = this._config.alingnmentEnabled !== undefined ? this._config.alingnmentEnabled : true;
 
-    const customAlignmentTypesProvided = Array.isArray(this._config.alignmentTypes) && this._config.alignmentTypes.length > 0;
+    const customAlignmentTypesProvided = Array.isArray(this._config.alignmentTunesTypes) && this._config.alignmentTunesTypes.length > 0;
 
-    if (this._config.alignmentTypes !== undefined && !customAlignmentTypesProvided) {
+    if (this._config.alignmentTunesTypes !== undefined && !customAlignmentTypesProvided) {
       console.warn("(ง'̀-'́)ง Alignment Option: no valid types were provided.");
     }
 
     if (customAlignmentTypesProvided) {
-      this._config.alignmentTypes = this._blockUtilsGetMergedConfig({
+      this._config.alignmentTunesTypes = this._blockUtilsGetMergedConfig({
         defaultConfig: DEFAULT_ALIGNMENT_CONFIG,
-        customConfig: this._config.alignmentTypes,
+        customConfig: this._config.alignmentTunesTypes,
         override: true,
       });
     } else {
-      this._config.alignmentTypes = DEFAULT_ALIGNMENT_CONFIG;
+      this._config.alignmentTunesTypes = DEFAULT_ALIGNMENT_CONFIG;
     }
   },
 
   _alignmentGetOptions({} = {}) {
-    return this._config.alignmentTypes.map((properties) => ({
+    return this._config.alignmentTunesTypes.map((properties) => ({
       type: 'default',
       icon: properties.icon,
       label: properties.label,

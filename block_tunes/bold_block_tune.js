@@ -14,24 +14,24 @@ export const boldBlockTuneFunctions = {
 
   _boldConfigure({} = {}) {
     this._config.boldEnabled = this._config.boldEnabled !== undefined ? this._config.boldEnabled : true;
-    const customBoldTypesProvided = Array.isArray(this._config.boldTypes) && this._config.boldTypes.length > 0;
-    if (this._config.boldTypes !== undefined && !customBoldTypesProvided) {
+    const customBoldTypesProvided = Array.isArray(this._config.boldTunesTypes) && this._config.boldTunesTypes.length > 0;
+    if (this._config.boldTunesTypes !== undefined && !customBoldTypesProvided) {
       console.warn("(ง'̀-'́)ง Bold Option: no valid types were provided.");
     }
     if (customBoldTypesProvided) {
-      this._config.boldTypes = this._blockTunesUtilsGetMergedConfig({
+      this._config.boldTunesTypes = this._blockTunesUtilsGetMergedConfig({
         defaultConfig: DEFAULT_BOLD_CONFIG,
-        customConfig: this._config.boldTypes,
+        customConfig: this._config.boldTunesTypes,
         override: true,
       });
     } else {
-      this._config.boldTypes = DEFAULT_BOLD_CONFIG;
+      this._config.boldTunesTypes = DEFAULT_BOLD_CONFIG;
     }
   },
 
   _boldGetOptions({} = {}) {
     const element = this._element;
-    return this._config.boldTypes.map((properties) => ({
+    return this._config.boldTunesTypes.map((properties) => ({
       type: 'default',
       icon: properties.icon,
       label: properties.label,

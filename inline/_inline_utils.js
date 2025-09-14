@@ -1,5 +1,5 @@
 export const inlineUtilsFunctions = {
-  _inlineUtilsHandleButtonClick({ event, tag, style }) {
+  _inlineUtilsHandleButtonClick({ event, tag, style, attributes }) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -26,11 +26,12 @@ export const inlineUtilsFunctions = {
         range: range,
         tag: tag,
         style: style,
+        attributes: attributes,
       });
       this.state = true;
     }
   },
-  _inlineUtilsWrap({ range, tag, style }) {
+  _inlineUtilsWrap({ range, tag, style, attributes }) {
     const selectedContent = range.extractContents();
     const tempDiv = document.createElement('div');
     tempDiv.appendChild(selectedContent);
@@ -41,7 +42,18 @@ export const inlineUtilsFunctions = {
     });
 
     const newTag = document.createElement(tag);
-    Object.assign(newTag.style, style);
+
+    // Adiciona os atributos (como href)
+    if (attributes) {
+      for (const key in attributes) {
+        newTag.setAttribute(key, attributes[key]);
+      }
+    }
+
+    // Adiciona os estilos (como color)
+    if (style) {
+      Object.assign(newTag.style, style);
+    }
 
     while (tempDiv.firstChild) {
       newTag.appendChild(tempDiv.firstChild);
@@ -50,7 +62,6 @@ export const inlineUtilsFunctions = {
     range.insertNode(newTag);
     this._api.selection.expandToTag(newTag);
   },
-
   _inlineUtilsUnwrap({ range, tag }) {
     const mark = this._api.selection.findParentTag(tag);
     if (!mark) {

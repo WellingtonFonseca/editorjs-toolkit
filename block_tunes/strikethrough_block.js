@@ -14,24 +14,24 @@ export const strikethroughBlockTuneFunctions = {
 
   _strikethroughConfigure({} = {}) {
     this._config.strikethroughEnabled = this._config.strikethroughEnabled !== undefined ? this._config.strikethroughEnabled : true;
-    const customStrikethroughTypesProvided = Array.isArray(this._config.strikethroughTypes) && this._config.strikethroughTypes.length > 0;
-    if (this._config.strikethroughTypes !== undefined && !customStrikethroughTypesProvided) {
+    const customStrikethroughTypesProvided = Array.isArray(this._config.strikethroughTunesTypes) && this._config.strikethroughTunesTypes.length > 0;
+    if (this._config.strikethroughTunesTypes !== undefined && !customStrikethroughTypesProvided) {
       console.warn("(ง'̀-'́)ง Strikethrough Option: no valid types were provided.");
     }
     if (customStrikethroughTypesProvided) {
-      this._config.strikethroughTypes = this._blockTunesUtilsGetMergedConfig({
+      this._config.strikethroughTunesTypes = this._blockTunesUtilsGetMergedConfig({
         defaultConfig: DEFAULT_STRIKETHROUGH_CONFIG,
-        customConfig: this._config.strikethroughTypes,
+        customConfig: this._config.strikethroughTunesTypes,
         override: true,
       });
     } else {
-      this._config.strikethroughTypes = DEFAULT_STRIKETHROUGH_CONFIG;
+      this._config.strikethroughTunesTypes = DEFAULT_STRIKETHROUGH_CONFIG;
     }
   },
 
   _strikethroughGetOptions({} = {}) {
     const element = this._element;
-    return this._config.strikethroughTypes.map((properties) => ({
+    return this._config.strikethroughTunesTypes.map((properties) => ({
       type: 'default',
       icon: properties.icon,
       label: properties.label,

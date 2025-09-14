@@ -14,24 +14,24 @@ export const italicBlockTuneFunctions = {
 
   _italicConfigure({} = {}) {
     this._config.italicEnabled = this._config.italicEnabled !== undefined ? this._config.italicEnabled : true;
-    const customItalicTypesProvided = Array.isArray(this._config.italicTypes) && this._config.italicTypes.length > 0;
-    if (this._config.italicTypes !== undefined && !customItalicTypesProvided) {
+    const customItalicTypesProvided = Array.isArray(this._config.italicTunesTypes) && this._config.italicTunesTypes.length > 0;
+    if (this._config.italicTunesTypes !== undefined && !customItalicTypesProvided) {
       console.warn("(ง'̀-'́)ง Italic Option: no valid types were provided.");
     }
     if (customItalicTypesProvided) {
-      this._config.italicTypes = this._blockTunesUtilsGetMergedConfig({
+      this._config.italicTunesTypes = this._blockTunesUtilsGetMergedConfig({
         defaultConfig: DEFAULT_ITALIC_CONFIG,
-        customConfig: this._config.italicTypes,
+        customConfig: this._config.italicTunesTypes,
         override: true,
       });
     } else {
-      this._config.italicTypes = DEFAULT_ITALIC_CONFIG;
+      this._config.italicTunesTypes = DEFAULT_ITALIC_CONFIG;
     }
   },
 
   _italicGetOptions({} = {}) {
     const element = this._element;
-    return this._config.italicTypes.map((properties) => ({
+    return this._config.italicTunesTypes.map((properties) => ({
       type: 'default',
       icon: properties.icon,
       label: properties.label,
