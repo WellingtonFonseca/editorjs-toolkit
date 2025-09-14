@@ -1,5 +1,9 @@
-import { alignmentBlockTuneFunctions } from '../_alignment_block_tune.js';
-import { blockUtilsFunctions } from '../_block_utils.js';
+import { alignmentBlockTuneFunctions } from '../block_tunes/alignment_block_tune.js';
+import { underlineBlockTuneFunctions } from '../block_tunes/underline_block_tune.js';
+import { strikethroughBlockTuneFunctions } from '../block_tunes/strikethrough_block.js';
+import { italicBlockTuneFunctions } from '../block_tunes/italic_block_tunes.js';
+import { boldBlockTuneFunctions } from '../block_tunes/bold_block_tune.js';
+import { blockUtilsFunctions } from './_block_utils.js';
 
 export class HeaderBlock {
   static get isTune() {
@@ -75,6 +79,11 @@ export class HeaderBlock {
     this._blockId = block.id;
 
     Object.assign(this, alignmentBlockTuneFunctions);
+    Object.assign(this, boldBlockTuneFunctions);
+    Object.assign(this, underlineBlockTuneFunctions);
+    Object.assign(this, strikethroughBlockTuneFunctions);
+    Object.assign(this, italicBlockTuneFunctions);
+
     Object.assign(this, blockUtilsFunctions);
 
     this._setConfig({
@@ -117,6 +126,18 @@ export class HeaderBlock {
 
     // aligment
     this._alignmentConfigure({});
+
+    // bold
+    this._boldConfigure({});
+
+    // underline
+    this._underlineConfigure({});
+
+    // strikethrough
+    this._strikethroughConfigure({});
+
+    // italic
+    this._italicConfigure({});
   }
 
   destroy() {}
@@ -150,7 +171,12 @@ export class HeaderBlock {
 
     const alignmentOptions = this._alignmentGetOptions({});
 
-    return [...headingOptions, ...alignmentOptions];
+    const boldOptions = this._boldGetOptions({});
+    const underlineOptions = this._underlineGetOptions({});
+    const strikethroughOptions = this._strikethroughGetOptions({});
+    const italicOptions = this._italicGetOptions({});
+
+    return [...headingOptions, ...this._blockUtilsSeparator, ...boldOptions, ...italicOptions, ...underlineOptions, ...strikethroughOptions, ...this._blockUtilsSeparator, ...alignmentOptions];
   }
 
   save(blockContent) {

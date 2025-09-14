@@ -1,8 +1,9 @@
-import { alignmentBlockTuneFunctions } from '../_alignment_block_tune.js';
-import { underlineBlockTuneFunctions } from '../_underline_block_tune.js';
-import { strikethroughBlockTuneFunctions } from '../_strikethrough_block.js';
-import { boldBlockTuneFunctions } from '../_bold_block_tune.js';
-import { blockUtilsFunctions } from '../_block_utils.js';
+import { alignmentBlockTuneFunctions } from '../block_tunes/alignment_block_tune.js';
+import { underlineBlockTuneFunctions } from '../block_tunes/underline_block_tune.js';
+import { strikethroughBlockTuneFunctions } from '../block_tunes/strikethrough_block.js';
+import { italicBlockTuneFunctions } from '../block_tunes/italic_block_tunes.js';
+import { boldBlockTuneFunctions } from '../block_tunes/bold_block_tune.js';
+import { blockUtilsFunctions } from './_block_utils.js';
 
 export class ParagraphBlock {
   static get isTune() {
@@ -45,6 +46,7 @@ export class ParagraphBlock {
     Object.assign(this, boldBlockTuneFunctions);
     Object.assign(this, underlineBlockTuneFunctions);
     Object.assign(this, strikethroughBlockTuneFunctions);
+    Object.assign(this, italicBlockTuneFunctions);
 
     Object.assign(this, blockUtilsFunctions);
 
@@ -78,6 +80,9 @@ export class ParagraphBlock {
 
     // strikethrough
     this._strikethroughConfigure({});
+
+    // italic
+    this._italicConfigure({});
   }
 
   destroy() {}
@@ -97,8 +102,9 @@ export class ParagraphBlock {
     const boldOptions = this._boldGetOptions({});
     const underlineOptions = this._underlineGetOptions({});
     const strikethroughOptions = this._strikethroughGetOptions({});
+    const italicOptions = this._italicGetOptions({});
 
-    return [...alignmentOptions, ...this._blockUtilsSeparator, ...boldOptions, ...underlineOptions, ...strikethroughOptions];
+    return [...boldOptions, ...italicOptions, ...underlineOptions, ...strikethroughOptions, ...this._blockUtilsSeparator, ...alignmentOptions];
   }
 
   save(blockContent) {

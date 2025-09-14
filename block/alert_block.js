@@ -1,4 +1,4 @@
-import { blockUtilsFunctions } from '../_block_utils.js';
+import { blockUtilsFunctions } from './_block_utils.js';
 
 export class AlertBlock {
   static get isTune() {

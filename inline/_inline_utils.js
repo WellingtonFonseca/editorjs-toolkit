@@ -37,11 +37,7 @@ export const inlineUtilsFunctions = {
 
     const identifyTags = tempDiv.querySelectorAll(tag);
     identifyTags.forEach((existingTag) => {
-      const parent = existingTag.parentNode;
-      while (existingTag.firstChild) {
-        parent.insertBefore(existingTag.firstChild, existingTag);
-      }
-      parent.removeChild(existingTag);
+      existingTag.replaceWith(...existingTag.childNodes);
     });
 
     const newTag = document.createElement(tag);
