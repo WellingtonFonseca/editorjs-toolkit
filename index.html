@@ -120,7 +120,7 @@
 
     const alertBlockConfig = {
       useIcon: false,
-      replaceAlertDefaultTypes: false,
+      replaceDefaultTypes: false,
       placeholderOnActive: "aaaaa",
       alertTypes: [
         {
@@ -163,10 +163,15 @@
 
     const paragraphBlockConfig = {
       alignmentTunesTypes,
+      alignmentTunesEnabled: false,
       boldTunesTypes,
+      boldTunesEnabled: false,
       italicTunesTypes,
+      italicTunesEnabled: false,
       underlineTunesTypes,
+      strikethroughTunesEnabled: false,
       strikethroughTunesTypes,
+      underlineTunesEnabled: false,
       placeholder: "Parágrafo",
       placeholderOnActive: "aaaaa",
       defaultAlign: "center",
@@ -183,9 +188,20 @@
 
     const headerBlockConfig = {
       alignmentTunesTypes,
+      alignmentTunesEnabled: false,
       boldTunesTypes,
+      boldTunesEnabled: false,
+      italicTunesTypes,
+      italicTunesEnabled: false,
+      underlineTunesTypes,
+      strikethroughTunesEnabled: false,
+      strikethroughTunesTypes,
+      underlineTunesEnabled: false,
+      placeholder: "Header",
+      placeholderOnActive: "aaaaa",
       defaultHeader: "h5",
-      replaceHeaderDefaultTypes: true,
+      defaultAlign: "center",
+      replaceDefaultTypes: true,
       headerTypes: [
         {
           tag: "h5",
@@ -194,7 +210,6 @@
           icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-align-center-icon lucide-align-center"><path d="M17 12H7"/><path d="M19 18H5"/><path d="M21 6H3"/></svg>',
         },
       ],
-      defaultAlign: "center",
     };
 
     const headerBlockEditor = {

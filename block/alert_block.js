@@ -179,7 +179,7 @@ export class AlertBlock {
   _setConfig({ config, readOnly } = {}) {
     this._config = config || {};
     this._config.readOnly = readOnly;
-    this._config.replaceAlertDefaultTypes = this._config.replaceAlertDefaultTypes ?? false;
+    this._config.replaceDefaultTypes = this._config.replaceDefaultTypes ?? false;
 
     if (this._config.placeholderOnActive === undefined || this._config.placeholderOnActive === null) {
       this._config.placeholderOnActive = 'Typing...';
@@ -188,11 +188,11 @@ export class AlertBlock {
     // alert
     const customAlertTypesProvided = Array.isArray(this._config.alertTypes) && this._config.alertTypes.length > 0;
 
-    if (this._config.replaceAlertDefaultTypes === true) {
+    if (this._config.replaceDefaultTypes === true) {
       if (customAlertTypesProvided) {
         this._config.alertTypes = this._config.alertTypes;
       } else {
-        console.warn("(ง'̀-'́)ง Alert Block: replaceAlertDefaultTypes is true but no valid alert types were provided.");
+        console.warn("(ง'̀-'́)ง Alert Block: replaceDefaultTypes is true but no valid alert types were provided.");
         this._config.alertTypes = [];
       }
     } else {

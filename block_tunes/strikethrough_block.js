@@ -13,7 +13,7 @@ export const strikethroughBlockTuneFunctions = {
   ...blockTunesUtilsFunctions,
 
   _strikethroughConfigure({} = {}) {
-    this._config.strikethroughEnabled = this._config.strikethroughEnabled !== undefined ? this._config.strikethroughEnabled : true;
+    this._config.strikethroughTunesEnabled = this._config.strikethroughTunesEnabled !== undefined ? this._config.strikethroughTunesEnabled : true;
     const customStrikethroughTypesProvided = Array.isArray(this._config.strikethroughTunesTypes) && this._config.strikethroughTunesTypes.length > 0;
     if (this._config.strikethroughTunesTypes !== undefined && !customStrikethroughTypesProvided) {
       console.warn("(ง'̀-'́)ง Strikethrough Option: no valid types were provided.");
@@ -41,9 +41,18 @@ export const strikethroughBlockTuneFunctions = {
         element: element,
         tag: properties.tag,
       }),
-      isDisabled: this._config.readOnly || !this._config.strikethroughEnabled,
+      isDisabled: this._config.readOnly || !this._config.strikethroughTunesEnabled,
       onActivate: () => {
-        this._strikethroughChange();
+        if (this._config.readOnly || !this._config.strikethroughTunesEnabled) {
+          return;
+        }
+        this._blockTunesUtilsHandleBlockClick({
+          element: element,
+          properties: {
+            type: 'tag',
+            tag: properties.tag,
+          },
+        });
       },
       hint: {
         title: properties.label,
@@ -51,28 +60,5 @@ export const strikethroughBlockTuneFunctions = {
         alignment: 'start',
       },
     }));
-  },
-
-  _strikethroughChange() {
-    if (this._config.readOnly || !this._config.strikethroughEnabled) {
-      return;
-    }
-
-    const element = this._element;
-    const strikethroughTag = DEFAULT_STRIKETHROUGH_CONFIG[0].tag;
-
-    if (this._blockTunesUtilsCheckState({ element: element, tag: strikethroughTag })) {
-      this._blockTunesUtilsUnwrap({
-        element: element,
-        tag: strikethroughTag,
-      });
-    } else {
-      this._blockTunesUtilsWrap({
-        element: element,
-        tag: strikethroughTag,
-      });
-    }
-
-    this._api.blocks.update(this._blockId);
   },
 };

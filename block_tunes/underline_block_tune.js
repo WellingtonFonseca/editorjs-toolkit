@@ -13,7 +13,7 @@ export const underlineBlockTuneFunctions = {
   ...blockTunesUtilsFunctions,
 
   _underlineConfigure({} = {}) {
-    this._config.underlineEnabled = this._config.underlineEnabled !== undefined ? this._config.underlineEnabled : true;
+    this._config.underlineTunesEnabled = this._config.underlineTunesEnabled !== undefined ? this._config.underlineTunesEnabled : true;
     const customUnderlineTypesProvided = Array.isArray(this._config.underlineTunesTypes) && this._config.underlineTunesTypes.length > 0;
     if (this._config.underlineTunesTypes !== undefined && !customUnderlineTypesProvided) {
       console.warn("(ง'̀-'́)ง Underline Option: no valid types were provided.");
@@ -41,9 +41,18 @@ export const underlineBlockTuneFunctions = {
         element: element,
         tag: properties.tag,
       }),
-      isDisabled: this._config.readOnly || !this._config.underlineEnabled,
+      isDisabled: this._config.readOnly || !this._config.underlineTunesEnabled,
       onActivate: () => {
-        this._underlineChange();
+        if (this._config.readOnly || !this._config.underlineTunesEnabled) {
+          return;
+        }
+        this._blockTunesUtilsHandleBlockClick({
+          element: element,
+          properties: {
+            type: 'tag',
+            tag: properties.tag,
+          },
+        });
       },
       hint: {
         title: properties.label,
@@ -51,27 +60,5 @@ export const underlineBlockTuneFunctions = {
         alignment: 'start',
       },
     }));
-  },
-
-  _underlineChange() {
-    if (this._config.readOnly || !this._config.underlineEnabled) {
-      return;
-    }
-
-    const element = this._element;
-    const underlineTag = DEFAULT_UNDERLINE_CONFIG[0].tag;
-
-    if (this._blockTunesUtilsCheckState({ element: element, tag: underlineTag })) {
-      this._blockTunesUtilsUnwrap({
-        element: element,
-        tag: underlineTag,
-      });
-    } else {
-      this._blockTunesUtilsWrap({
-        element: element,
-        tag: underlineTag,
-      });
-    }
-    this._api.blocks.update(this._blockId);
   },
 };

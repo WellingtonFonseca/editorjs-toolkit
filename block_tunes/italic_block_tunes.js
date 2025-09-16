@@ -13,7 +13,7 @@ export const italicBlockTuneFunctions = {
   ...blockTunesUtilsFunctions,
 
   _italicConfigure({} = {}) {
-    this._config.italicEnabled = this._config.italicEnabled !== undefined ? this._config.italicEnabled : true;
+    this._config.italicTunesEnabled = this._config.italicTunesEnabled !== undefined ? this._config.italicTunesEnabled : true;
     const customItalicTypesProvided = Array.isArray(this._config.italicTunesTypes) && this._config.italicTunesTypes.length > 0;
     if (this._config.italicTunesTypes !== undefined && !customItalicTypesProvided) {
       console.warn("(ง'̀-'́)ง Italic Option: no valid types were provided.");
@@ -41,9 +41,18 @@ export const italicBlockTuneFunctions = {
         element: element,
         tag: properties.tag,
       }),
-      isDisabled: this._config.readOnly || !this._config.italicEnabled,
+      isDisabled: this._config.readOnly || !this._config.italicTunesEnabled,
       onActivate: () => {
-        this._italicChange();
+        if (this._config.readOnly || !this._config.italicTunesEnabled) {
+          return;
+        }
+        this._blockTunesUtilsHandleBlockClick({
+          element: element,
+          properties: {
+            type: 'tag',
+            tag: properties.tag,
+          },
+        });
       },
       hint: {
         title: properties.label,
@@ -51,28 +60,5 @@ export const italicBlockTuneFunctions = {
         alignment: 'start',
       },
     }));
-  },
-
-  _italicChange() {
-    if (this._config.readOnly || !this._config.italicEnabled) {
-      return;
-    }
-
-    const element = this._element;
-    const italicTag = DEFAULT_ITALIC_CONFIG[0].tag;
-
-    if (this._blockTunesUtilsCheckState({ element: element, tag: italicTag })) {
-      this._blockTunesUtilsUnwrap({
-        element: element,
-        tag: italicTag,
-      });
-    } else {
-      this._blockTunesUtilsWrap({
-        element: element,
-        tag: italicTag,
-      });
-    }
-
-    this._api.blocks.update(this._blockId);
   },
 };

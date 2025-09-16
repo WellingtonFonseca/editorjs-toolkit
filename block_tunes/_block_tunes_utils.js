@@ -1,4 +1,21 @@
 export const blockTunesUtilsFunctions = {
+  _blockTunesUtilsHandleBlockClick({ element, properties }) {
+    if (properties.type === 'tag') {
+      if (this._blockTunesUtilsCheckState({ element, tag: properties.tag })) {
+        this._blockTunesUtilsUnwrap({
+          element: element,
+          tag: properties.tag,
+        });
+      } else {
+        this._blockTunesUtilsWrap({
+          element: element,
+          tag: properties.tag,
+        });
+      }
+    } else if (properties.type === 'style') {
+      element.style[properties.styleProperty] = properties.styleValue;
+    }
+  },
   _blockTunesUtilsWrap({ element, tag }) {
     const newTag = document.createElement(tag);
 

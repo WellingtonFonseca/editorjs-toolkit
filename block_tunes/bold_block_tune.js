@@ -13,7 +13,7 @@ export const boldBlockTuneFunctions = {
   ...blockTunesUtilsFunctions,
 
   _boldConfigure({} = {}) {
-    this._config.boldEnabled = this._config.boldEnabled !== undefined ? this._config.boldEnabled : true;
+    this._config.boldTunesEnabled = this._config.boldTunesEnabled !== undefined ? this._config.boldTunesEnabled : true;
     const customBoldTypesProvided = Array.isArray(this._config.boldTunesTypes) && this._config.boldTunesTypes.length > 0;
     if (this._config.boldTunesTypes !== undefined && !customBoldTypesProvided) {
       console.warn("(ง'̀-'́)ง Bold Option: no valid types were provided.");
@@ -41,9 +41,18 @@ export const boldBlockTuneFunctions = {
         element: element,
         tag: properties.tag,
       }),
-      isDisabled: this._config.readOnly || !this._config.boldEnabled,
+      isDisabled: this._config.readOnly || !this._config.boldTunesEnabled,
       onActivate: () => {
-        this._boldChange();
+        if (this._config.readOnly || !this._config.boldTunesEnabled) {
+          return;
+        }
+        this._blockTunesUtilsHandleBlockClick({
+          element: element,
+          properties: {
+            type: 'tag',
+            tag: properties.tag,
+          },
+        });
       },
       hint: {
         title: properties.label,
@@ -51,28 +60,5 @@ export const boldBlockTuneFunctions = {
         alignment: 'start',
       },
     }));
-  },
-
-  _boldChange() {
-    if (this._config.readOnly || !this._config.boldEnabled) {
-      return;
-    }
-
-    const element = this._element;
-    const boldTag = DEFAULT_BOLD_CONFIG[0].tag;
-
-    if (this._blockTunesUtilsCheckState({ element: element, tag: boldTag })) {
-      this._blockTunesUtilsUnwrap({
-        element: element,
-        tag: boldTag,
-      });
-    } else {
-      this._blockTunesUtilsWrap({
-        element: element,
-        tag: boldTag,
-      });
-    }
-
-    this._api.blocks.update(this._blockId);
   },
 };

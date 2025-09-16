@@ -1,8 +1,8 @@
 import { alignmentBlockTuneFunctions } from '../block_tunes/alignment_block_tune.js';
-import { underlineBlockTuneFunctions } from '../block_tunes/underline_block_tune.js';
-import { strikethroughBlockTuneFunctions } from '../block_tunes/strikethrough_block.js';
-import { italicBlockTuneFunctions } from '../block_tunes/italic_block_tunes.js';
 import { boldBlockTuneFunctions } from '../block_tunes/bold_block_tune.js';
+import { italicBlockTuneFunctions } from '../block_tunes/italic_block_tunes.js';
+import { strikethroughBlockTuneFunctions } from '../block_tunes/strikethrough_block.js';
+import { underlineBlockTuneFunctions } from '../block_tunes/underline_block_tune.js';
 import { blockUtilsFunctions } from './_block_utils.js';
 
 export class HeaderBlock {
@@ -101,11 +101,11 @@ export class HeaderBlock {
 
     const customHeaderTypesProvided = Array.isArray(this._config.headerTypes) && this._config.headerTypes.length > 0;
 
-    if (this._config.replaceHeaderDefaultTypes === true) {
+    if (this._config.replaceDefaultTypes === true) {
       if (customHeaderTypesProvided) {
         this._config.headerTypes = this._config.headerTypes;
       } else {
-        console.warn("(ง'̀-'́)ง Header Block: replaceHeaderDefaultTypes is true but no valid alert types were provided.");
+        console.warn("(ง'̀-'́)ง Header Block: replaceDefaultTypes is true but no valid alert types were provided.");
         this._config.headerTypes = [];
       }
     } else {
@@ -235,9 +235,15 @@ export class HeaderBlock {
     tag.innerHTML = this._data.text;
     tag.contentEditable = this._config.readOnly === false ? true : false;
 
+    const placeholder = this._config.placeholder ?? this._elementData.label;
+
     if (this._data.text === '') {
-      tag.setAttribute('data-placeholder', this._elementData.label);
+      tag.setAttribute('data-placeholder', placeholder);
     }
+
+    const placeholderOnActive = this._config.placeholderOnActive ?? this._elementData.label;
+
+    tag.setAttribute('data-placeholder-active', placeholderOnActive);
 
     Object.assign(tag.style, this._elementData.style, {
       textAlign: this._data.align,
