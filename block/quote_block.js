@@ -72,12 +72,30 @@ export class QuoteBlock {
     ];
   }
 
+  static get DEFAULT_AUTHOR_CONFIG() {
+    return [
+      {
+        tag: 'true',
+        label: 'With Author',
+        use: true,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-plus-icon lucide-user-round-plus"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M19 16v6"/><path d="M22 19h-6"/></svg>',
+      },
+      {
+        tag: 'false',
+        label: 'Without Author',
+        use: false,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-minus-icon lucide-user-round-minus"><path d="M2 21a8 8 0 0 1 13.292-6"/><circle cx="10" cy="8" r="5"/><path d="M22 19h-6"/></svg>',
+      },
+    ];
+  }
+
   constructor({ data, api, block, config, readOnly }) {
     this._data = {
       text: data.text || '',
+      author: data.author || '',
       quote: data.quote || (config && config.defaultQuote) || 'quote',
       style: data.style || (config && config.defaultStyle) || 'outline',
-      use_icon: data.use_icon ?? config.useIcon ?? true,
+      has_author: data.has_author ?? config.hasAuthor ?? false,
     };
 
     this._element = null;
@@ -101,7 +119,6 @@ export class QuoteBlock {
       this._config.placeholderOnActive = 'Typing...';
     }
 
-    // quote
     const customQuoteTypesProvided = Array.isArray(this._config.quoteTypes) && this._config.quoteTypes.length > 0;
 
     if (this._config.replaceDefaultTypes === true) {
@@ -112,10 +129,6 @@ export class QuoteBlock {
         this._config.quoteTypes = [];
       }
     } else {
-      if (this._config.quoteTypes !== undefined && !customQuoteTypesProvided) {
-        console.warn("(ง'̀-'́)ง Quote Block: no valid quote types were provided.");
-      }
-
       if (customQuoteTypesProvided) {
         this._config.quoteTypes = this._blockUtilsGetMergedConfig({
           defaultConfig: QuoteBlock.DEFAULT_QUOTE_CONFIG,
@@ -127,7 +140,6 @@ export class QuoteBlock {
       }
     }
 
-    // style
     const customQuoteStyleTypesProvided = Array.isArray(this._config.quoteStyleTypes) && this._config.quoteStyleTypes.length > 0;
 
     if (this._config.quoteStyleTypes !== undefined && !customQuoteStyleTypesProvided) {
@@ -142,6 +154,22 @@ export class QuoteBlock {
       });
     } else {
       this._config.quoteStyleTypes = QuoteBlock.DEFAULT_STYLES_CONFIG;
+    }
+
+    const customQuoteAuthorTypesProvided = Array.isArray(this._config.quoteAuthorTypes) && this._config.quoteAuthorTypes.length > 0;
+
+    if (this._config.quoteAuthorTypes !== undefined && !customQuoteAuthorTypesProvided) {
+      console.warn("(ง'̀-'́)ง Quote Block: no valid quote author types were provided.");
+    }
+
+    if (customQuoteAuthorTypesProvided) {
+      this._config.quoteAuthorTypes = this._blockUtilsGetMergedConfig({
+        defaultConfig: QuoteBlock.DEFAULT_AUTHOR_CONFIG,
+        customConfig: this._config.quoteAuthorTypes,
+        override: true,
+      });
+    } else {
+      this._config.quoteAuthorTypes = QuoteBlock.DEFAULT_AUTHOR_CONFIG;
     }
   }
 
@@ -159,26 +187,6 @@ export class QuoteBlock {
     if (this._config.readOnly) {
       return [];
     }
-
-    const quoteTypeOptions = this._config.quoteTypes.map((properties) => ({
-      type: 'default',
-      icon: properties.iconMenu,
-      label: properties.label,
-      closeOnActivate: false,
-      toggle: 'quote_types',
-      isActive: this._data.quote.toUpperCase() === properties.tag.toUpperCase(),
-      isDisabled: false,
-      onActivate: (event) => {
-        this._changeType({
-          newType: properties.tag,
-        });
-      },
-      hint: {
-        title: properties.label,
-        description: 'change quote type',
-        alignment: 'start',
-      },
-    }));
 
     const styleOptions = this._config.quoteStyleTypes.map((properties) => ({
       type: 'default',
@@ -200,22 +208,46 @@ export class QuoteBlock {
       },
     }));
 
-    return [...quoteTypeOptions, ...this._blockUtilsSeparator, ...styleOptions];
+    const authorOptions = this._config.quoteAuthorTypes.map((properties) => ({
+      type: 'default',
+      icon: properties.icon,
+      label: properties.label,
+      closeOnActivate: false,
+      toggle: 'quote_author',
+      isActive: this._data.has_author === properties.use,
+      isDisabled: false,
+      onActivate: (event) => {
+        this._changeAuthorOption({
+          newState: properties.use,
+        });
+      },
+    }));
+
+    return [...styleOptions, ...this._blockUtilsSeparator, ...authorOptions];
   }
 
   save(blockContent) {
-    blockContent.normalize();
+    const textElement = blockContent.querySelector('.cdx-quote-text');
+    const authorElement = blockContent.querySelector('.cdx-quote-author');
+
     return {
-      text: blockContent.innerHTML,
+      text: textElement ? textElement.innerHTML : '',
+      author: authorElement ? authorElement.innerHTML : '',
       quote: this._data.quote,
       style: this._data.style,
-      use_icon: this._data.use_icon,
+      has_author: this._data.has_author,
     };
   }
 
   static get sanitize() {
     return {
-      blockquote: {},
+      blockquote: {
+        style: true,
+      },
+      div: {
+        class: true,
+        style: true,
+      },
       b: {},
       em: {},
       del: {},
@@ -250,84 +282,105 @@ export class QuoteBlock {
 
   _getTag() {
     const wrapper = document.createElement('blockquote');
-    const iconStartWrapper = document.createElement('div');
+    const contentWrapper = document.createElement('div');
     const textElement = document.createElement('div');
+    const iconWrapper = document.createElement('div');
 
     const wrapperStyles = this._elementData.styles.wrapper[this._data.style];
 
-    Object.assign(
-      wrapper.style,
-      {
-        display: 'flex',
-        width: '100%',
-        borderRadius: '4px',
-        padding: '10px',
-        boxSizing: 'border-box',
-        fontSize: '14px',
-        fontFamily: 'Arial, sans-serif',
-      },
-      wrapperStyles,
-    );
+    Object.assign(wrapper.style, {
+      width: '100%',
+      borderRadius: '4px',
+      padding: '10px',
+      boxSizing: 'border-box',
+      fontSize: '14px',
+      fontFamily: 'Arial, sans-serif',
+      ...wrapperStyles,
+    });
 
-    if (this._data.use_icon === true) {
-      iconStartWrapper.innerHTML = this._elementData.iconRender;
+    Object.assign(contentWrapper.style, {
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start',
+      flexWrap: 'wrap',
+    });
 
-      Object.assign(
-        iconStartWrapper.style,
-        {
-          width: '10%',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        },
-        this._elementData.styles.icon,
-      );
-    }
+    Object.assign(iconWrapper.style, {
+      width: '10%',
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      ...this._elementData.styles.icon,
+    });
+
+    iconWrapper.innerHTML = this._elementData.iconRender;
 
     textElement.innerHTML = this._data.text;
     textElement.contentEditable = this._config.readOnly === false ? true : false;
+    textElement.classList.add('cdx-quote-text');
 
     if (this._data.text === '') {
       textElement.setAttribute('data-placeholder', this._elementData.label);
     }
-
     textElement.setAttribute('data-placeholder-active', this._config.placeholderOnActive);
-
     Object.assign(textElement.style, {
-      width: this._data.use_icon === true ? '90%' : '100%',
-      // paddingLeft: '10px',
+      flexGrow: '1',
+      width: '90%',
     });
 
-    if (this._data.use_icon === true) {
-      wrapper.appendChild(iconStartWrapper);
-    }
+    contentWrapper.appendChild(iconWrapper);
+    contentWrapper.appendChild(textElement);
+    wrapper.appendChild(contentWrapper);
 
-    wrapper.appendChild(textElement);
+    if (this._data.has_author === true) {
+      const authorElement = document.createElement('div');
+      authorElement.innerHTML = this._data.author;
+      authorElement.contentEditable = this._config.readOnly === false ? true : false;
+      authorElement.classList.add('cdx-quote-author');
+
+      Object.assign(authorElement.style, {
+        textAlign: 'left',
+        fontWeight: 'bold',
+        marginTop: '10px',
+        fontSize: '12px',
+        width: '100%',
+      });
+
+      wrapper.appendChild(authorElement);
+    }
 
     return wrapper;
-  }
-
-  _changeType({ newType } = {}) {
-    if (this._config.readOnly) {
-      return;
-    }
-    this._data.text = this._element.querySelector('div:last-child').innerHTML;
-    this._data.quote = newType;
-    this._elementData = this._getStylesForType({
-      type: newType,
-    });
-    const newElement = this._getTag();
-    this._element.parentNode.replaceChild(newElement, this._element);
-    this._element = newElement;
-    this._api.blocks.updateBlock(this._blockId);
   }
 
   _changeStyle({ newStyle } = {}) {
     if (this._config.readOnly) {
       return;
     }
-    this._data.text = this._element.querySelector('div:last-child').innerHTML;
+    this._data.text = this._element.querySelector('.cdx-quote-text').innerHTML;
+    if (this._data.has_author) {
+      const authorElement = this._element.querySelector('.cdx-quote-author');
+      this._data.author = authorElement ? authorElement.innerHTML : '';
+    }
+
     this._data.style = newStyle;
+
+    const newElement = this._getTag();
+    this._element.parentNode.replaceChild(newElement, this._element);
+    this._element = newElement;
+    this._api.blocks.updateBlock(this._blockId);
+  }
+
+  _changeAuthorOption({ newState } = {}) {
+    if (this._config.readOnly) {
+      return;
+    }
+    this._data.text = this._element.querySelector('.cdx-quote-text').innerHTML;
+    if (this._data.has_author) {
+      const authorElement = this._element.querySelector('.cdx-quote-author');
+      this._data.author = authorElement ? authorElement.innerHTML : '';
+    }
+
+    this._data.has_author = newState;
 
     const newElement = this._getTag();
     this._element.parentNode.replaceChild(newElement, this._element);

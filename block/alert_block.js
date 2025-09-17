@@ -320,9 +320,10 @@ export class AlertBlock {
   }
 
   save(blockContent) {
-    blockContent.normalize();
+    const textElement = blockContent.querySelector('.cdx-alert-text');
+
     return {
-      text: blockContent.innerHTML,
+      text: textElement ? textElement.innerHTML : '',
       alert: this._data.alert,
       style: this._data.style,
       use_icon: this._data.use_icon,
@@ -371,37 +372,32 @@ export class AlertBlock {
 
     const wrapperStyles = this._elementData.styles.wrapper[this._data.style];
 
-    Object.assign(
-      wrapper.style,
-      {
-        display: 'flex',
-        width: '100%',
-        borderRadius: '4px',
-        padding: '10px',
-        boxSizing: 'border-box',
-        fontSize: '14px',
-        fontFamily: 'Arial, sans-serif',
-      },
-      wrapperStyles,
-    );
+    Object.assign(wrapper.style, {
+      display: 'flex',
+      width: '100%',
+      borderRadius: '4px',
+      padding: '10px',
+      boxSizing: 'border-box',
+      fontSize: '14px',
+      fontFamily: 'Arial, sans-serif',
+      ...wrapperStyles,
+    });
 
     if (this._data.use_icon === true) {
       iconWrapper.innerHTML = this._elementData.iconRender;
 
-      Object.assign(
-        iconWrapper.style,
-        {
-          width: '10%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        this._elementData.styles.icon,
-      );
+      Object.assign(iconWrapper.style, {
+        width: '10%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...this._elementData.styles.icon,
+      });
     }
 
     textElement.innerHTML = this._data.text;
     textElement.contentEditable = this._config.readOnly === false ? true : false;
+    textElement.classList.add('cdx-alert-text');
 
     if (this._data.text === '') {
       textElement.setAttribute('data-placeholder', this._elementData.label);
