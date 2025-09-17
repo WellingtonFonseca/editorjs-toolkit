@@ -38,7 +38,7 @@ export class AlertBlock {
           wrapper: {
             outline: {
               backgroundColor: '#fffbe6',
-              border: '1px solid #ffe58f',
+              border: '1px solid #f0ad4e',
               color: '#000',
             },
             solid: {
@@ -61,7 +61,7 @@ export class AlertBlock {
           wrapper: {
             outline: {
               backgroundColor: '#e6f7ff',
-              border: '1px solid #91d5ff',
+              border: '1px solid #5bc0de',
               color: '#000',
             },
             solid: {
@@ -84,7 +84,7 @@ export class AlertBlock {
           wrapper: {
             outline: {
               backgroundColor: '#f6ffed',
-              border: '1px solid #b7eb8f',
+              border: '1px solid #8fbc8f',
               color: '#000',
             },
             solid: {
@@ -107,7 +107,7 @@ export class AlertBlock {
           wrapper: {
             outline: {
               backgroundColor: '#fff1f0',
-              border: '1px solid #ffa39e',
+              border: '1px solid #f08080',
               color: '#000',
             },
             solid: {
