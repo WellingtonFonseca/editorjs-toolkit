@@ -121,23 +121,14 @@ export class QuoteBlock {
 
     const customQuoteTypesProvided = Array.isArray(this._config.quoteTypes) && this._config.quoteTypes.length > 0;
 
-    if (this._config.replaceDefaultTypes === true) {
-      if (customQuoteTypesProvided) {
-        this._config.quoteTypes = this._config.quoteTypes;
-      } else {
-        console.warn("(ง'̀-'́)ง Quote Block: replaceDefaultTypes is true but no valid quote types were provided.");
-        this._config.quoteTypes = [];
-      }
+    if (customQuoteTypesProvided) {
+      this._config.quoteTypes = this._blockUtilsGetMergedConfig({
+        defaultConfig: QuoteBlock.DEFAULT_QUOTE_CONFIG,
+        customConfig: this._config.quoteTypes,
+        override: true,
+      });
     } else {
-      if (customQuoteTypesProvided) {
-        this._config.quoteTypes = this._blockUtilsGetMergedConfig({
-          defaultConfig: QuoteBlock.DEFAULT_QUOTE_CONFIG,
-          customConfig: this._config.quoteTypes,
-          override: false,
-        });
-      } else {
-        this._config.quoteTypes = QuoteBlock.DEFAULT_QUOTE_CONFIG;
-      }
+      this._config.quoteTypes = QuoteBlock.DEFAULT_QUOTE_CONFIG;
     }
 
     const customQuoteStyleTypesProvided = Array.isArray(this._config.quoteStyleTypes) && this._config.quoteStyleTypes.length > 0;
@@ -282,13 +273,14 @@ export class QuoteBlock {
 
   _getTag() {
     const wrapper = document.createElement('blockquote');
-    const contentWrapper = document.createElement('div');
-    const textElement = document.createElement('div');
     const iconWrapper = document.createElement('div');
+    const textAndAuthorWrapper = document.createElement('div');
+    const textElement = document.createElement('div');
 
     const wrapperStyles = this._elementData.styles.wrapper[this._data.style];
 
     Object.assign(wrapper.style, {
+      display: 'flex',
       width: '100%',
       borderRadius: '4px',
       padding: '10px',
@@ -298,13 +290,6 @@ export class QuoteBlock {
       ...wrapperStyles,
     });
 
-    Object.assign(contentWrapper.style, {
-      display: 'flex',
-      alignItems: 'flex-start',
-      justifyContent: 'flex-start',
-      flexWrap: 'wrap',
-    });
-
     Object.assign(iconWrapper.style, {
       width: '10%',
       display: 'flex',
@@ -312,8 +297,15 @@ export class QuoteBlock {
       justifyContent: 'center',
       ...this._elementData.styles.icon,
     });
-
     iconWrapper.innerHTML = this._elementData.iconRender;
+
+    Object.assign(textAndAuthorWrapper.style, {
+      width: '90%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      flexGrow: '1',
+    });
 
     textElement.innerHTML = this._data.text;
     textElement.contentEditable = this._config.readOnly === false ? true : false;
@@ -324,13 +316,11 @@ export class QuoteBlock {
     }
     textElement.setAttribute('data-placeholder-active', this._config.placeholderOnActive);
     Object.assign(textElement.style, {
+      width: '100%',
       flexGrow: '1',
-      width: '90%',
     });
 
-    contentWrapper.appendChild(iconWrapper);
-    contentWrapper.appendChild(textElement);
-    wrapper.appendChild(contentWrapper);
+    textAndAuthorWrapper.appendChild(textElement);
 
     if (this._data.has_author === true) {
       const authorElement = document.createElement('div');
@@ -340,14 +330,18 @@ export class QuoteBlock {
 
       Object.assign(authorElement.style, {
         textAlign: 'left',
-        fontWeight: 'bold',
         marginTop: '10px',
-        fontSize: '12px',
+        fontWeight: 'bold',
+        fontSize: '14px',
+        fontFamily: 'Arial, sans-serif',
         width: '100%',
       });
 
-      wrapper.appendChild(authorElement);
+      textAndAuthorWrapper.appendChild(authorElement);
     }
+
+    wrapper.appendChild(iconWrapper);
+    wrapper.appendChild(textAndAuthorWrapper);
 
     return wrapper;
   }
