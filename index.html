@@ -73,6 +73,7 @@
     <script type="module">
       import { AlertBlock } from "./block/alert_block.js";
       import { HeaderBlock } from "./block/header_block.js";
+      import { ImageBlock } from "./block/image_block.js";
       import { ParagraphBlock } from "./block/paragraph_block.js";
       import { QuoteBlock } from "./block/quote_block.js";
 
@@ -200,6 +201,23 @@
         },
         inlineToolbar: true,
         // config: headerBlockConfig,
+      };
+
+      const imageBlockConfig = {
+        alignmentTunesTypes,
+        alignmentTunesEnabled: true,
+        captionPlaceholder: "Legenda",
+        captionPlaceholderOnActive: "digitara legenda",
+        defaultAlign: "center",
+      };
+
+      const imageBlockEditor = {
+        class: ImageBlock,
+        toolbox: {
+          // title: "Título",
+        },
+        inlineToolbar: true,
+        config: imageBlockConfig,
       };
 
       const paragraphBlockConfig = {
@@ -334,6 +352,7 @@
         tools: {
           alert: alertBlockEditor,
           header: headerBlockEditor,
+          image: imageBlockEditor,
           paragraph: paragraphBlockEditor,
           quote: quoteBlockEditor,
           link: linkInlineEditor,
