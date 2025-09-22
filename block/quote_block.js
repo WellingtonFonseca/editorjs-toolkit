@@ -134,7 +134,7 @@ export class QuoteBlock {
     const customQuoteStyleTypesProvided = Array.isArray(this._config.quoteStyleTypes) && this._config.quoteStyleTypes.length > 0;
 
     if (this._config.quoteStyleTypes !== undefined && !customQuoteStyleTypesProvided) {
-      console.warn("(ง'̀-'́)ง Quote Block: no valid quote style types were provided.");
+      console.warn('(•̀o•́)ง Quote Block: no valid quote style types were provided.');
     }
 
     if (customQuoteStyleTypesProvided) {
@@ -150,7 +150,7 @@ export class QuoteBlock {
     const customQuoteAuthorTypesProvided = Array.isArray(this._config.quoteAuthorTypes) && this._config.quoteAuthorTypes.length > 0;
 
     if (this._config.quoteAuthorTypes !== undefined && !customQuoteAuthorTypesProvided) {
-      console.warn("(ง'̀-'́)ง Quote Block: no valid quote author types were provided.");
+      console.warn('(•̀o•́)ง Quote Block: no valid quote author types were provided.');
     }
 
     if (customQuoteAuthorTypesProvided) {
@@ -258,14 +258,14 @@ export class QuoteBlock {
 
   _getStylesForType({ type } = {}) {
     if (type === undefined) {
-      console.warn("(ง'̀-'́)ง Quote Block: unspecified type");
+      console.warn('(•̀o•́)ง Quote Block: unspecified type');
       return;
     }
 
     const elementData = this._config.quoteTypes.find((item) => item.tag === type);
 
     if (elementData === undefined) {
-      console.warn("(ง'̀-'́)ง Quote Block: type specified was not found in available types");
+      console.warn('(•̀o•́)ง Quote Block: type specified was not found in available types');
       return this._config.quoteTypes[0];
     }
     return elementData;

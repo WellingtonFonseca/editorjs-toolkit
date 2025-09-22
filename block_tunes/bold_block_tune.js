@@ -16,7 +16,7 @@ export const boldBlockTuneFunctions = {
     this._config.boldTunesEnabled = this._config.boldTunesEnabled !== undefined ? this._config.boldTunesEnabled : true;
     const customBoldTypesProvided = Array.isArray(this._config.boldTunesTypes) && this._config.boldTunesTypes.length > 0;
     if (this._config.boldTunesTypes !== undefined && !customBoldTypesProvided) {
-      console.warn("(ง'̀-'́)ง Bold Option: no valid types were provided.");
+      console.warn('(•̀o•́)ง Bold Option: no valid types were provided.');
     }
     if (customBoldTypesProvided) {
       this._config.boldTunesTypes = this._blockTunesUtilsGetMergedConfig({

@@ -16,7 +16,7 @@ export const italicBlockTuneFunctions = {
     this._config.italicTunesEnabled = this._config.italicTunesEnabled !== undefined ? this._config.italicTunesEnabled : true;
     const customItalicTypesProvided = Array.isArray(this._config.italicTunesTypes) && this._config.italicTunesTypes.length > 0;
     if (this._config.italicTunesTypes !== undefined && !customItalicTypesProvided) {
-      console.warn("(ง'̀-'́)ง Italic Option: no valid types were provided.");
+      console.warn('(•̀o•́)ง Italic Option: no valid types were provided.');
     }
     if (customItalicTypesProvided) {
       this._config.italicTunesTypes = this._blockTunesUtilsGetMergedConfig({

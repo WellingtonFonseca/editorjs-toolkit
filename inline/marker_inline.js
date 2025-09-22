@@ -87,12 +87,12 @@ export class MarkerInline {
       if (customMarkerTypesProvided) {
         this._config.markerTypes = this._config.markerTypes;
       } else {
-        console.warn("(ง'̀-'́)ง Marker Inline: replaceMarkerDefaultTypes is true but no valid markers types were provided.");
+        console.warn('(•̀o•́)ง Marker Inline: replaceMarkerDefaultTypes is true but no valid markers types were provided.');
         this._config.markerTypes = [];
       }
     } else {
       if (this._config.markerTypes !== undefined && !customMarkerTypesProvided) {
-        console.warn("(ง'̀-'́)ง Marker Inline: no valid markers types were provided.");
+        console.warn('(•̀o•́)ง Marker Inline: no valid markers types were provided.');
       }
 
       if (customMarkerTypesProvided) {

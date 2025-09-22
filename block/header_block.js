@@ -105,12 +105,12 @@ export class HeaderBlock {
       if (customHeaderTypesProvided) {
         this._config.headerTypes = this._config.headerTypes;
       } else {
-        console.warn("(ง'̀-'́)ง Header Block: replaceDefaultTypes is true but no valid alert types were provided.");
+        console.warn('(•̀o•́)ง Header Block: replaceDefaultTypes is true but no valid alert types were provided.');
         this._config.headerTypes = [];
       }
     } else {
       if (this._config.headerTypes !== undefined && !customHeaderTypesProvided) {
-        console.warn("(ง'̀-'́)ง Alert Block: no valid alert types were provided.");
+        console.warn('(•̀o•́)ง Alert Block: no valid alert types were provided.');
       }
 
       if (customHeaderTypesProvided) {
@@ -125,7 +125,30 @@ export class HeaderBlock {
     }
 
     // aligment
-    this._alignmentConfigure({});
+    this._alignmentConfigure({
+      styleProperties: [
+        {
+          tag: 'left',
+          styleProperty: 'textAlign',
+          styleValue: 'left',
+        },
+        {
+          tag: 'center',
+          styleProperty: 'textAlign',
+          styleValue: 'center',
+        },
+        {
+          tag: 'right',
+          styleProperty: 'textAlign',
+          styleValue: 'right',
+        },
+        {
+          tag: 'justify',
+          styleProperty: 'textAlign',
+          styleValue: 'justify',
+        },
+      ],
+    });
 
     // bold
     this._boldConfigure({});
@@ -216,14 +239,14 @@ export class HeaderBlock {
 
   _getStylesForTag({ tag } = {}) {
     if (tag === undefined) {
-      console.warn("(ง'̀-'́)ง Header Inline: unspecified tag");
+      console.warn('(•̀o•́)ง Header Inline: unspecified tag');
       return;
     }
 
     const elementData = this._config.headerTypes.find((item) => item.tag === tag);
 
     if (elementData === undefined) {
-      console.warn("(ง'̀-'́)ง Header Inline: tag specified was not found in available levels");
+      console.warn('(•̀o•́)ง Header Inline: tag specified was not found in available levels');
       return this._elementData;
     }
 

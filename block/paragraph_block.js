@@ -70,7 +70,30 @@ export class ParagraphBlock {
     }
 
     // aligment
-    this._alignmentConfigure({});
+    this._alignmentConfigure({
+      styleProperties: [
+        {
+          tag: 'left',
+          styleProperty: 'textAlign',
+          styleValue: 'left',
+        },
+        {
+          tag: 'center',
+          styleProperty: 'textAlign',
+          styleValue: 'center',
+        },
+        {
+          tag: 'right',
+          styleProperty: 'textAlign',
+          styleValue: 'right',
+        },
+        {
+          tag: 'justify',
+          styleProperty: 'textAlign',
+          styleValue: 'justify',
+        },
+      ],
+    });
 
     // bold
     this._boldConfigure({});

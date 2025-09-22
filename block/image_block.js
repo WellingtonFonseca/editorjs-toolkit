@@ -54,6 +54,10 @@ export class ImageBlock {
     this._config = config || {};
     this._config.readOnly = readOnly;
 
+    if (this._config.inputUploadPlaceholder === undefined || this._config.inputUploadPlaceholder === null) {
+      this._config.inputUploadPlaceholder = 'Drag & Drop an image here or click to upload';
+    }
+
     if (this._config.captionPlaceholderOnActive === undefined || this._config.captionPlaceholderOnActive === null) {
       this._config.captionPlaceholderOnActive = 'Typing...';
     }
@@ -62,7 +66,30 @@ export class ImageBlock {
       this._config.captionPlaceholder = 'Image caption...';
     }
 
-    this._alignmentConfigure({});
+    this._alignmentConfigure({
+      styleProperties: [
+        {
+          tag: 'left',
+          styleProperty: 'alignItems',
+          styleValue: 'flex-start',
+        },
+        {
+          tag: 'center',
+          styleProperty: 'alignItems',
+          styleValue: 'center',
+        },
+        {
+          tag: 'right',
+          styleProperty: 'alignItems',
+          styleValue: 'flex-end',
+        },
+        {
+          tag: 'justify',
+          styleProperty: 'alignItems',
+          styleValue: 'stretch',
+        },
+      ],
+    });
   }
 
   destroy() {}
@@ -126,15 +153,14 @@ export class ImageBlock {
     const captionElement = document.createElement('figcaption');
 
     Object.assign(wrapper.style, {
-      textAlign: this._data.align,
       margin: '0',
       width: '100%',
+      display: 'flex', // adicionado
+      flexDirection: 'column', // adicionado
+      alignItems: this._data.align, // alterado
     });
 
-    Object.assign(imageContainer.style, {
-      display: 'flex',
-      justifyContent: this._data.align === 'center' ? 'center' : this._data.align,
-    });
+    // Removemos o style de justify-content do imageContainer
 
     imageElement.src = this._data.url;
     imageElement.alt = this._data.alt;
@@ -191,7 +217,7 @@ export class ImageBlock {
       cursor: 'pointer',
     });
 
-    placeholderText.innerHTML = 'Drag & Drop an image here or click to upload';
+    placeholderText.innerHTML = this._config.inputUploadPlaceholder;
     Object.assign(placeholderText.style, {
       color: '#6c757d',
       fontSize: '14px',

@@ -192,12 +192,12 @@ export class AlertBlock {
       if (customAlertTypesProvided) {
         this._config.alertTypes = this._config.alertTypes;
       } else {
-        console.warn("(ง'̀-'́)ง Alert Block: replaceDefaultTypes is true but no valid alert types were provided.");
+        console.warn('(•̀o•́)ง Alert Block: replaceDefaultTypes is true but no valid alert types were provided.');
         this._config.alertTypes = [];
       }
     } else {
       if (this._config.alertTypes !== undefined && !customAlertTypesProvided) {
-        console.warn("(ง'̀-'́)ง Alert Block: no valid alert types were provided.");
+        console.warn('(•̀o•́)ง Alert Block: no valid alert types were provided.');
       }
 
       if (customAlertTypesProvided) {
@@ -215,7 +215,7 @@ export class AlertBlock {
     const customAlertStyleTypesProvided = Array.isArray(this._config.alertStyleTypes) && this._config.alertStyleTypes.length > 0;
 
     if (this._config.alertStyleTypes !== undefined && !customAlertStyleTypesProvided) {
-      console.warn("(ง'̀-'́)ง Alert Block: no valid alert style types were provided.");
+      console.warn('(•̀o•́)ง Alert Block: no valid alert style types were provided.');
     }
 
     if (customAlertStyleTypesProvided) {
@@ -232,7 +232,7 @@ export class AlertBlock {
     const customAlertUseIconTypesProvided = Array.isArray(this._config.alertUseIconTypes) && this._config.alertUseIconTypes.length > 0;
 
     if (this._config.alertUseIconTypes !== undefined && !customAlertUseIconTypesProvided) {
-      console.warn("(ง'̀-'́)ง Alert Block: no valid alert use icons types were provided.");
+      console.warn('(•̀o•́)ง Alert Block: no valid alert use icons types were provided.');
     }
 
     if (customAlertUseIconTypesProvided) {
@@ -352,14 +352,14 @@ export class AlertBlock {
 
   _getStylesForType({ type } = {}) {
     if (type === undefined) {
-      console.warn("(ง'̀-'́)ง Alert Block: unspecified type");
+      console.warn('(•̀o•́)ง Alert Block: unspecified type');
       return;
     }
 
     const elementData = this._config.alertTypes.find((item) => item.tag === type);
 
     if (elementData === undefined) {
-      console.warn("(ง'̀-'́)ง Alert Block: type specified was not found in available types");
+      console.warn('(•̀o•́)ง Alert Block: type specified was not found in available types');
       return this._config.alertTypes[0];
     }
     return elementData;

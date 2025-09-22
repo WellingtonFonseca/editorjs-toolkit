@@ -16,7 +16,7 @@ export const strikethroughBlockTuneFunctions = {
     this._config.strikethroughTunesEnabled = this._config.strikethroughTunesEnabled !== undefined ? this._config.strikethroughTunesEnabled : true;
     const customStrikethroughTypesProvided = Array.isArray(this._config.strikethroughTunesTypes) && this._config.strikethroughTunesTypes.length > 0;
     if (this._config.strikethroughTunesTypes !== undefined && !customStrikethroughTypesProvided) {
-      console.warn("(ง'̀-'́)ง Strikethrough Option: no valid types were provided.");
+      console.warn('(•̀o•́)ง Strikethrough Option: no valid types were provided.');
     }
     if (customStrikethroughTypesProvided) {
       this._config.strikethroughTunesTypes = this._blockTunesUtilsGetMergedConfig({

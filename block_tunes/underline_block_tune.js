@@ -16,7 +16,7 @@ export const underlineBlockTuneFunctions = {
     this._config.underlineTunesEnabled = this._config.underlineTunesEnabled !== undefined ? this._config.underlineTunesEnabled : true;
     const customUnderlineTypesProvided = Array.isArray(this._config.underlineTunesTypes) && this._config.underlineTunesTypes.length > 0;
     if (this._config.underlineTunesTypes !== undefined && !customUnderlineTypesProvided) {
-      console.warn("(ง'̀-'́)ง Underline Option: no valid types were provided.");
+      console.warn('(•̀o•́)ง Underline Option: no valid types were provided.');
     }
     if (customUnderlineTypesProvided) {
       this._config.underlineTunesTypes = this._blockTunesUtilsGetMergedConfig({
